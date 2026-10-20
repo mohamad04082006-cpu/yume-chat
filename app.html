@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100d19">
+<title>Yume Chat | عالم الأنمي</title>
+<style>
+:root{--bg:#100d19;--panel:#191526;--panel2:#211b30;--pink:#e6a1e8;--purple:#a98af4;--text:#f8f3ff;--muted:#aaa1ba;--line:#30283f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+.app{max-width:900px;margin:auto;min-height:100dvh;background:var(--bg);position:relative;padding-bottom:76px}
+header{padding:19px 17px 14px;background:linear-gradient(135deg,#241633,#171323);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:17px;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;font-size:27px;box-shadow:0 0 25px #bc8be633}
+h1{font-size:23px;margin:0;letter-spacing:.5px}
+.sub{color:var(--muted);font-size:12px;margin-top:3px}
+.header-actions{margin-right:auto;display:flex;gap:8px}
+.iconbtn{background:var(--panel2);border:1px solid var(--line);width:41px;height:41px;border-radius:14px;font-size:19px}
+.search{margin-top:17px;display:flex;gap:9px;background:#100d19;border:1px solid var(--line);padding:0 12px;border-radius:14px;align-items:center}
+.search input{width:100%;background:none;border:0;outline:0;color:white;padding:13px 0}
+.stories{padding:16px 14px 12px;border-bottom:1px solid var(--line)}
+.section-title{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;margin-bottom:13px}
+.muted{color:var(--muted);font-size:12px;font-weight:400}
+.storyrow{display:flex;gap:16px;overflow:auto;padding-bottom:4px}
+.story{flex:0 0 64px;text-align:center;border:0;background:none;padding:0}
+.ring{width:61px;height:61px;border-radius:50%;padding:3px;margin:auto auto 6px;background:linear-gradient(135deg,var(--pink),var(--purple))}
+.ring img,.avatar{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.ringinner{background:var(--panel);border-radius:50%;width:100%;height:100%;display:grid;place-items:center;font-size:29px}
+.story span{font-size:11px;color:#ddd4e9;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.content{padding:17px 14px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:17px}
+.tab{border:1px solid var(--line);background:var(--panel);padding:9px 15px;border-radius:13px;white-space:nowrap;color:var(--muted)}
+.tab.active{background:#3a294a;color:var(--pink);border-color:#805b9b}
+.chat{display:flex;align-items:center;gap:12px;padding:13px 3px;border-bottom:1px solid #2a2337;cursor:pointer}
+.avatar{width:54px;height:54px;flex-shrink:0;background:linear-gradient(135deg,#46345c,#282039);display:grid;place-items:center;font-size:28px}
+.chatmain{min-width:0;flex:1}
+.chatname{font-weight:650;font-size:15px;margin-bottom:5px}
+.preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chatmeta{text-align:left;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.time{font-size:10px;color:var(--muted)}
+.badge{background:var(--purple);color:#160e23;border-radius:20px;min-width:21px;padding:2px 6px;font-size:10px;text-align:center}
+.bottom{position:fixed;bottom:0;left:0;right:0;max-width:900px;margin:auto;display:flex;justify-content:space-around;background:#191526f5;border-top:1px solid var(--line);padding:9px 4px calc(9px + env(safe-area-inset-bottom));backdrop-filter:blur(12px);z-index:5}
+.nav{background:none;border:0;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:53px}
+.nav b{font-size:22px;font-weight:400}
+.nav.active{color:var(--pink)}
+.page{display:none}.page.active{display:block}
+.empty{text-align:center;color:var(--muted);padding:40px 15px}
+.profile{text-align:center;padding:30px 15px}
+.bigavatar{width:105px;height:105px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;font-size:54px;margin:0 auto 14px}
+.btn{border:0;border-radius:13px;padding:11px 15px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#1a1024;font-weight:700}
+.outline{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+.formrow{display:flex;gap:8px;margin:12px 0}
+.field{min-width:0;width:100%;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;color:white;outline:none}
+.setting{padding:15px;background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+#conversation{position:fixed;inset:0;z-index:10;background:var(--bg);display:none;max-width:900px;margin:auto}
+#conversation.open{display:flex;flex-direction:column}
+.convhead{display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border-bottom:1px solid var(--line)}
+.convhead .avatar{width:43px;height:43px}
+.convbody{flex:1;overflow:auto;padding:17px;background:radial-gradient(ellipse at top,#251a36,var(--bg) 70%)}
+.bubble{max-width:83%;width:fit-content;padding:11px 13px;margin:10px 0;border-radius:16px 16px 4px 16px;background:#2b213d;line-height:1.65;font-size:14px;overflow-wrap:anywhere}
+.bubble.mine{margin-right:auto;background:#60417b;border-radius:16px 16px 16px 4px}
+.bubble small{display:block;text-align:left;font-size:10px;color:#ddd0ea;margin-top:4px}
+.convform{display:flex;gap:8px;padding:10px;background:var(--panel);padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.convform input{flex:1;min-width:0;border:0;background:var(--bg);color:white;border-radius:22px;padding:12px;outline:none}
+@media(min-width:650px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand">
+  <div class="logo">🌸</div>
+  <div><h1>Yume Chat</h1><div class="sub">عالمك، أصدقاؤك، وحكايات الأنمي ✨</div></div>
+  <div class="header-actions"><button class="iconbtn" onclick="showPage('profile')" aria-label="الملف الشخصي">♙</button></div>
+ </div>
+ <label class="search">⌕ <input id="search" placeholder="ابحثي عن محادثة..." oninput="renderChats()"></label>
+</header>
+
+<div class="stories">
+ <div class="section-title"><span>حالات الأصدقاء 🌙</span><span class="muted">يومياتهم</span></div>
+ <div class="storyrow" id="stories">
+  <button class="story" onclick="addStory()"><div class="ring"><div class="ringinner">＋</div></div><span>حالتي</span></button>
+  <button class="story" onclick="viewStory('سـاكورا','🌸','يوم جميل مع أصدقائي ✨')"><div class="ring"><div class="ringinner">🌸</div></div><span>ساكورا</span></button>
+  <button class="story" onclick="viewStory('هيناتا','💜','أحب الهدوء والأنمي 🌙')"><div class="ring"><div class="ringinner">💜</div></div><span>هيناتا</span></button>
+  <button class="story" onclick="viewStory('رين','🦋','كل يوم مغامرة جديدة')"><div class="ring"><div class="ringinner">🦋</div></div><span>رين</span></button>
+  <button class="story" onclick="viewStory('يوكي','🌙','مساء الأنمي!')"><div class="ring"><div class="ringinner">🌙</div></div><span>يوكي</span></button>
+ </div>
+</div>
+
+<main class="content">
+<section class="page active" id="chats">
+ <div class="tabs">
+  <button class="tab active" onclick="filterChats('all',this)">الكل</button>
+  <button class="tab" onclick="filterChats('unread',this)">غير مقروءة</button>
+  <button class="tab" onclick="showPage('groups')">المجموعات</button>
+ </div>
+ <div class="section-title"><span>محادثاتك</span><span class="muted" id="chatCount">4 محادثات</span></div>
+ <div id="chatlist"></div>
+ <div class="empty" id="noChats" style="display:none">ما لقينا محادثات بهذا الاسم 🌸</div>
+</section>
+
+<section class="page" id="friends">
+ <div class="section-title">أصدقاؤك 💜 <button class="btn" onclick="addFriend()">＋ إضافة</button></div>
+ <div id="friendlist"></div>
+</section>
+
+<section class="page" id="groups">
+ <div class="section-title">مجموعات الأنمي 🌸 <button class="btn" onclick="addGroup()">＋ مجموعة</button></div>
+ <div id="grouplist"></div>
+ <p class="muted">المجموعات هنا تجريبية ومحفوظة خلال فتح الصفحة فقط.</p>
+</section>
+
+<section class="page" id="status">
+ <div class="section-title">الحالات ✨ <button class="btn" onclick="addStory()">＋ حالة</button></div>
+ <div id="statuslist"><div class="empty">شاركي اقتباسك أو مزاجك اليومي 🌙</div></div>
+</section>
+
+<section class="page" id="profile">
+ <div class="profile">
+  <div class="bigavatar" id="profileEmoji">🌸</div>
+  <h2 id="profileTitle">Yume User</h2>
+  <p class="muted" id="bioText">عاشقة الأنمي واللحظات الجميلة ✨</p>
+  <button class="btn" onclick="editProfile()">تعديل الملف الشخصي</button>
+  <div class="formrow"><input id="photoInput" type="file" accept="image/*" class="field" aria-label="اختيار صورة من الهاتف" onchange="setPhoto(event)"></div>
+ </div>
+ <div class="setting"><span>🎨 المظهر</span><button class="btn outline" onclick="toggleTheme()">تغيير اللون</button></div>
+ <div class="setting"><span>🔔 الإشعارات</span><span class="muted">تجريبية</span></div>
+ <div class="setting"><span>🔒 الخصوصية</span><span class="muted">واجهة تجريبية</span></div>
+ <div class="setting"><span>🌸 عن Yume Chat</span><span class="muted">نسخة الواجهة 1.0</span></div>
+</section>
+</main>
+
+<nav class="bottom">
+ <button class="nav active" data-page="chats" onclick="showPage('chats',this)"><b>▤</b>الدردشات</button>
+ <button class="nav" data-page="friends" onclick="showPage('friends',this)"><b>♡</b>الأصدقاء</button>
+ <button class="nav" data-page="groups" onclick="showPage('groups',this)"><b>♧</b>المجموعات</button>
+ <button class="nav" data-page="status" onclick="showPage('status',this)"><b>◉</b>الحالات</button>
+ <button class="nav" data-page="profile" onclick="showPage('profile',this)"><b>♙</b>حسابي</button>
+</nav>
+</div>
+
+<div id="conversation">
+ <div class="convhead">
+  <button class="iconbtn" onclick="closeChat()">→</button>
+  <div class="avatar" id="convAvatar">🌸</div>
+  <div style="flex:1"><strong id="convName">صديق</strong><div class="muted">محادثة تجريبية</div></div>
+  <button class="iconbtn" onclick="alert('هذه نسخة واجهة فقط، لا توجد مكالمات حقيقية بعد.')">⋯</button>
+ </div>
+ <div class="convbody" id="messages"></div>
+ <form class="convform" onsubmit="sendMessage(event)">
+  <button type="button" class="iconbtn" onclick="addEmoji()">☻</button>
+  <input id="messageInput" placeholder="اكتبي رسالة..." autocomplete="off">
+  <button class="btn" type="submit">➤</button>
+ </form>
+</div>
+
+<script>
+const chats=[
+{id:1,name:'ساكورا',emoji:'🌸',preview:'هلا! كيف كان يومك؟ ✨',time:'09:10',unread:2,friend:true,msgs:[{text:'هلا والله! 🌸',mine:false},{text:'كيف كان يومك؟ ✨',mine:false}]},
+{id:2,name:'هيناتا',emoji:'💜',preview:'شفتِ الحلقة الجديدة؟',time:'08:45',unread:1,friend:true,msgs:[{text:'شفتِ الحلقة الجديدة؟',mine:false}]},
+{id:3,name:'أصدقاء الأنمي',emoji:'🎎',preview:'رين: من يحب الأنمي القديم؟',time:'أمس',unread:0,group:true,msgs:[{text:'رين: من يحب الأنمي القديم؟',mine:false}]},
+{id:4,name:'يوكي',emoji:'🌙',preview:'تصبحين على خير 🌙',time:'أمس',unread:0,friend:true,msgs:[{text:'تصبحين على خير 🌙',mine:false}]}
+];
+let activeChat=null,filter='all',groups=['أصدقاء الأنمي','عشاق المانغا','عالم الشونين'];
+const $=id=>document.getElementById(id);
+function renderChats(){
+ const q=$('search').value.trim().toLowerCase();
+ const arr=chats.filter(c=>(filter!=='unread'||c.unread>0)&&(!q||c.name.toLowerCase().includes(q)||c.preview.toLowerCase().includes(q)));
+ $('chatlist').innerHTML=arr.map(c=>`<div class="chat" onclick="openChat(${c.id})"><div class="avatar">${c.emoji}</div><div class="chatmain"><div class="chatname">${esc(c.name)}</div><div class="preview">${esc(c.preview)}</div></div><div class="chatmeta"><span class="time">${c.time}</span>${c.unread?`<span class="badge">${c.unread}</span>`:''}</div></div>`).join('');
+ $('noChats').style.display=arr.length?'none':'block';$('chatCount').textContent=arr.length+' محادثات';
+}
+function renderFriends(){
+ $('friendlist').innerHTML=chats.filter(c=>c.friend).map(c=>`<div class="chat" onclick="openChat(${c.id})"><div class="avatar">${c.emoji}</div><div class="chatmain"><div class="chatname">${esc(c.name)}</div><div class="preview">صديق في عالم الأنمي</div></div><button class="btn outline" onclick="event.stopPropagation();openChat(${c.id})">مراسلة</button></div>`).join('');
+}
+function renderGroups(){
+ $('grouplist').innerHTML=groups.map((g,i)=>`<div class="chat" onclick="openGroup('${esc(g)}')"><div class="avatar">🎎</div><div class="chatmain"><div class="chatname">${esc(g)}</div><div class="preview">مجتمع الأنمي • مجموعة تجريبية</div></div><span class="muted">›</span></div>`).join('');
+}
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+ document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.page===id));
+ if(id==='friends')renderFriends();if(id==='groups')renderGroups();
+}
+function filterChats(f,btn){filter=f;document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderChats()}
+function openChat(id){
+ activeChat=chats.find(c=>c.id===id);if(!activeChat)return;
+ activeChat.unread=0;$('convName').textContent=activeChat.name;$('convAvatar').textContent=activeChat.emoji;
+ renderMessages();$('conversation').classList.add('open');renderChats();
+}
+function openGroup(name){
+ let c=chats.find(x=>x.name===name);
+ if(!c){c={id:Date.now(),name,emoji:'🎎',preview:'مجموعة جديدة',time:'الآن',unread:0,group:true,msgs:[]};chats.unshift(c)}
+ openChat(c.id);
+}
+function renderMessages(){
+ $('messages').innerHTML=activeChat.msgs.map(m=>`<div class="bubble ${m.mine?'mine':''}">${esc(m.text)}<small>${m.mine?'أنتِ':'الآن'}</small></div>`).join('');
+ $('messages').scrollTop=$('messages').scrollHeight;
+}
+function sendMessage(e){
+ e.preventDefault();const input=$('messageInput'),text=input.value.trim();if(!text||!activeChat)return;
+ activeChat.msgs.push({text,mine:true});activeChat.preview=text;activeChat.time='الآن';input.value='';renderMessages();renderChats();
+}
+function closeChat(){$('conversation').classList.remove('open');activeChat=null}
+function addEmoji(){$('messageInput').value+=' 💜';$('messageInput').focus()}
+function addFriend(){
+ const name=prompt('اكتبي اسم الصديق:');if(!name||!name.trim())return;
+ const id=Date.now();chats.unshift({id,name:name.trim(),emoji:'🌸',preview:'ابدئي محادثة جديدة',time:'الآن',unread:0,friend:true,msgs:[]});renderFriends();renderChats();
+}
+function addGroup(){
+ const name=prompt('اسم مجموعة الأنمي:');if(!name||!name.trim())return;
+ groups.unshift(name.trim());renderGroups();
+}
+function addStory(){
+ const text=prompt('اكتبي حالتك أو اقتباسك:');if(!text||!text.trim())return;
+ const el=document.createElement('div');el.className='setting';el.textContent='🌸 '+text;$('statuslist').prepend(el);
+ const story=document.createElement('button');story.className='story';story.innerHTML='<div class="ring"><div class="ringinner">✨</div></div><span>حالتي</span>';story.onclick=()=>alert(text);$('stories').prepend(story);
+}
+function viewStory(name,emoji,text){alert(name+' '+emoji+'\n\n'+text)}
+function editProfile(){
+ const name=prompt('اسم العرض:', $('profileTitle').textContent);if(name&&name.trim())$('profileTitle').textContent=name.trim();
+ const bio=prompt('نبذة عنك:', $('bioText').textContent);if(bio!==null&&bio.trim())$('bioText').textContent=bio.trim();
+}
+function setPhoto(e){
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/'))return alert('اختاري ملف صورة.');
+ const reader=new FileReader();reader.onload=()=>{
+  $('profileEmoji').innerHTML='';$('profileEmoji').style.backgroundImage=`url("${reader.result}")`;$('profileEmoji').style.backgroundSize='cover';$('profileEmoji').style.backgroundPosition='center';
+ };reader.readAsDataURL(file);
+}
+function toggleTheme(){
+ const root=document.documentElement;
+ const current=getComputedStyle(root).getPropertyValue('--pink').trim();
+ root.style.setProperty('--pink',current==='#e6a1e8'?'#8fe0d0':'#e6a1e8');
+ root.style.setProperty('--purple',current==='#e6a1e8'?'#78b9ee':'#a98af4');
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+renderChats();renderFriends();renderGroups();
+</script>
+</body>
+</html>
